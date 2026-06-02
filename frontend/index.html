@@ -1,36 +1,52 @@
+
 <!DOCTYPE html>
 <html>
-    <head>my website</head>
-    <body>
-        <header>
-            <h1>my life</h1>
-            <p>i love my family</p>
-        </header>
-        <nav>
-            <ul>
-                <li><a href="#home">home</a></li>
-                <li><a href="#about">about</a></li>
-            </ul>
-            </nav>
-            <main>
-                
-<section id="home">
-<h2>Home Section</h2>
-<p>This is the main content area where the primary information is displayed.</p>
-</section>
+<head>
+</head>
+<body>
 
+  <div class="container">
 
-<article>
-<h2>Article Title</h2>
-<p>This is an article. Articles contain standalone content that could be reused or syndicated on other platforms.</p>
-</article>
+    <div class="left">
+      <input type="text" id="name" placeholder="Enter name">
+      <button onclick="saveUser()">Save</button>
+    </div>
 
+    <div class="right">
+      <h3>Users</h3>
+      <div id="users"></div>
+    </div>
 
-<aside>
-<h3>Sidebar</h3>
-<p>This is some additional information placed in an aside, such as related links or advertisements.</p>
-</aside>
-</main>
-        
-    </body>
+  </div>
+
+  <script>
+    const API = "https://section-2l-backend.onrender.com/users";
+
+    async function saveUser() {
+      const name = document.getElementById("name").value;
+
+      await fetch(API, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ name })
+      });
+
+      document.getElementById("name").value = "";
+      loadUsers();
+    }
+
+    async function loadUsers() {
+      const res = await fetch(API);
+      const users = await res.json();
+
+      document.getElementById("users").innerHTML =
+        users.map(u => `<p>${u.name}</p>`).join("");
+    }
+
+    loadUsers();
+  </script>
+
+</body>
 </html>
